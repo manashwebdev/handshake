@@ -1,0 +1,6 @@
+{
+  "outputDirectory": "client",
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://handshake-wdg5.onrender.com/api/:path*" }
+  ]
+}
