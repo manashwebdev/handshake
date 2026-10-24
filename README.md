@@ -26,7 +26,29 @@
 2. Copy `.env.example` to `.env`, then set `MONGODB_URI` (MongoDB Atlas free tier works) and `JWT_SECRET`.
 3. `npm start`, then open http://localhost:3000
 
-The server serves `public/index.html` and the API on the same origin.
+The Express server serves the `client/` folder and the API (`/api/...`) on the same origin, so no CORS setup is needed.
+
+## Project structure
+
+```
+handshake-saas/
+├── client/                 # Frontend (static files)
+│   ├── index.html
+│   ├── css/styles.css
+│   └── js/
+│       ├── landing.js      # Landing page animations and demo
+│       └── app.js          # Auth, dashboard, proposals
+├── server/                 # Backend (Node + Express + MongoDB)
+│   ├── server.js           # App entry point
+│   ├── config.js           # Env vars and constants
+│   ├── utils.js            # Shared helpers
+│   ├── models/             # User.js, Deal.js
+│   ├── middleware/auth.js  # JWT auth and role checks
+│   └── routes/             # auth.js, deals.js, billing.js
+├── docs/screenshots/
+├── package.json
+└── .env.example
+```
 
 ## Future updates
 
@@ -34,6 +56,6 @@ The server serves `public/index.html` and the API on the same origin.
 - Real UPI payments for deposits and final payments
 - Auto-generated invoices after payment
 
-Before real customers: connect Razorpay (see the two TODO notes in `server.js`), remove `DEMO_BILLING`, and deploy behind HTTPS with `NODE_ENV=production`.
+Before real customers: connect Razorpay (see the TODO notes in `server/routes/deals.js` and `server/routes/billing.js`), remove `DEMO_BILLING`, and deploy behind HTTPS with `NODE_ENV=production`.
 
 > Approval in Handshake is a click-to-accept record, not a certified e-signature.
