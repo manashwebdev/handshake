@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Handshake: your deal, one link</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--v:#6B3EF5;--ink:#0C0A29;--mut:#66667D;--ok:#16B364;--line:#E6E4F0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth;background:#fff}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:#fff;color:var(--ink);font:400 17px/1.55 Outfit,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:#fff;z-index:30}
+h1,h2,h3{margin:0;font-weight:500;letter-spacing:-.035em;line-height:1.05}
+h1{font-size:clamp(2.4rem,5.4vw,4.2rem)}h2{font-size:clamp(2rem,4vw,3.2rem)}h3{font-size:1.3rem;letter-spacing:-.02em}
+p{margin:0}a{color:inherit}.mut{color:var(--mut)}
+.w{max-width:1200px;margin:0 auto;padding:0 20px}
+section{padding:72px 0}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:#fff}
+header .w{display:flex;align-items:center;height:64px;gap:24px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:1.25rem;text-decoration:none;letter-spacing:-.02em}
+.lt{width:30px;height:30px;border-radius:9px;background:var(--v);display:grid;place-items:center}
+nav{margin-left:auto;display:flex;gap:26px;align-items:center}
+nav a:not(.btn){text-decoration:none;color:var(--mut);font-weight:500;display:none}
+@media(min-width:760px){nav a:not(.btn){display:inline}}
+nav a:not(.btn):hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:99px;padding:13px 26px;background:var(--ink);color:#fff;font:500 1rem Outfit,sans-serif;cursor:pointer;text-decoration:none;transition:background .2s,transform .2s}
+.btn:hover{background:var(--v);transform:translateY(-1px)}
+.btn.s{padding:9px 18px;font-size:.92rem}
+.btn.o{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn.o:hover{background:#F4F0FF}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+:focus-visible{outline:3px solid var(--v);outline-offset:3px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:99px;border:1px solid var(--line);font-size:.85rem;font-weight:500;color:var(--mut);background:#fff}
+.pill.v{background:var(--v);border-color:var(--v);color:#fff}
+.hero{position:relative;max-width:1200px;margin:8px auto 0;border-radius:32px;background:linear-gradient(180deg,#F5F1FF 0%,#DDD1FF 100%);height:600px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 20px}
+.hero .lt{width:60px;height:60px;border-radius:18px;margin-bottom:22px;box-shadow:0 16px 30px -12px rgba(107,62,245,.7)}
+.hero h1{max-width:9em}.hero .btn{margin-top:30px}
+.fc{position:absolute;background:#fff;border-radius:16px;padding:14px 16px;text-align:left;font-size:.82rem;box-shadow:0 26px 50px -24px rgba(70,30,160,.4);transform:rotate(var(--r));opacity:0;animation:in .8s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes in{from{opacity:0;transform:translateY(26px) rotate(var(--r))}to{opacity:1;transform:rotate(var(--r))}}
+.fc small{color:var(--mut);font-size:.78rem}.fc b{font-weight:500}
+.t1{--r:-6deg;left:5%;top:15%;width:250px;background:var(--ink);color:#fff;animation-delay:.1s}.t1 small{color:#B9B6D6}
+.t2{--r:5deg;right:5%;top:9%;width:200px;animation-delay:.25s}
+.t3{--r:4deg;left:3%;bottom:-70px;width:230px;animation-delay:.4s}
+.t4{--r:-4deg;right:4%;bottom:-60px;width:250px;animation-delay:.55s}
+@media(max-width:900px){.fc{display:none}.hero{height:460px}}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.big{font-size:2rem;font-weight:500;letter-spacing:-.03em;line-height:1.1}
+.gw{position:relative;width:118px;height:118px;margin:8px auto 4px}
+.gauge{width:100%;height:100%;border-radius:50%;background:conic-gradient(var(--ok) 0 38%,#F5B642 0 62%,var(--v) 0 100%);mask:radial-gradient(farthest-side,#0000 calc(100% - 14px),#000 calc(100% - 13px));-webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - 14px),#000 calc(100% - 13px))}
+.gw b{position:absolute;inset:0;display:grid;place-items:center;font-size:1.25rem;font-weight:500}
+.lg{display:flex;gap:10px;justify-content:center;font-size:.72rem;color:var(--mut)}.lg i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}
+.chip{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.74rem;font-weight:500}
+.cs{background:#FFF3D6;color:#7A4E00}.ca{background:#ECE6FF;color:#4B28C7}.cp{background:#DDF7EA;color:#0B7A47}
+.bar{height:8px;border-radius:8px;background:#ECE9F7;margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;background:var(--v);border-radius:8px}
+.stage{max-width:1200px;margin:0 auto;border-radius:32px;background:linear-gradient(180deg,#F5F1FF 0%,#DDD1FF 100%);padding:60px 20px 0;overflow:hidden;text-align:center}
+.stage h2{margin:16px auto 0;max-width:10em}
+.em{display:flex;gap:6px;max-width:420px;margin:28px auto 0;background:#fff;border-radius:99px;padding:5px}
+.em input{flex:1;min-width:0;border:0;background:transparent;padding:0 16px;font:400 1rem Outfit,sans-serif;color:var(--ink)}.em input:focus-visible{outline:0}
+.lap{max-width:780px;margin:44px auto 0;background:#101018;border-radius:18px 18px 0 0;padding:10px 10px 0;height:350px;overflow:hidden}
+.scr{background:#fff;border-radius:10px 10px 0 0;height:100%;padding:14px 16px;text-align:left;font-size:.8rem}
+.tb{display:flex;align-items:center;gap:12px;margin-bottom:14px}.tb .lt{width:22px;height:22px;border-radius:7px}
+.tabs{display:flex;gap:6px;margin:0 auto}.tabs i{font-style:normal;padding:4px 12px;border-radius:99px;color:var(--mut)}.tabs i.on{background:var(--ink);color:#fff}
+.gh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.gh b{font-size:1.15rem;font-weight:500}
+.g3{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px}
+.mc{border:1px solid var(--line);border-radius:12px;padding:12px}
+.mc .row{padding:6px 0;border-bottom:1px solid var(--line)}.mc .row:last-child{border:0}
+.mv{margin-top:10px;background:var(--v);color:#fff;border-radius:12px;padding:12px 14px}
+@media(max-width:700px){.g3{grid-template-columns:1fr}.g3 .mc:nth-child(n+2){display:none}}
+.logos{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 40px;padding:34px 0 0;color:#A5A3B8;font-weight:600;font-size:1.25rem;letter-spacing:-.02em}
+.cap{text-align:center;color:var(--mut);font-size:.95rem;padding-top:34px}
+.ctr{text-align:center}.ctr h2{margin:14px auto 0}.ctr .mut{margin-top:12px}
+.dm{max-width:1060px;margin:44px auto 0;display:grid;gap:22px;align-items:center;background:#F7F5FF;border-radius:32px;padding:34px 22px}
+@media(min-width:900px){.dm{grid-template-columns:1fr 296px 1fr}.dm>.cd:first-child{transform:rotate(-2deg)}.dm>.cd:last-child{transform:rotate(2deg)}}
+.cd{background:#fff;border-radius:20px;padding:20px;box-shadow:0 26px 50px -28px rgba(70,30,160,.4);text-align:left}
+fieldset{border:0;padding:0;margin:0;min-width:0}fieldset:disabled{opacity:.5}
+.opt{display:flex;gap:10px;align-items:center;padding:11px 12px;border:1px solid var(--line);border-radius:12px;margin-top:9px;cursor:pointer;font-size:.95rem}
+.opt:has(input:checked){border-color:var(--v);background:#F4F0FF}
+.opt input{accent-color:var(--v);width:18px;height:18px}.opt span{flex:1}.opt b{font-weight:500}
+.lbl{font-weight:500;margin-top:16px;display:block}
+.seg{display:flex;gap:8px;margin-top:8px}.seg label{flex:1;position:relative}.seg input{position:absolute;opacity:0}
+.seg span{display:block;text-align:center;padding:8px;border:1px solid var(--line);border-radius:99px;cursor:pointer;font-weight:500}
+.seg input:checked+span{background:var(--ink);color:#fff;border-color:var(--ink)}
+.seg input:focus-visible+span{outline:3px solid var(--v);outline-offset:2px}
+.ph{position:relative;text-align:left;background:#fff;border-radius:30px;padding:20px 16px 16px;border:8px solid #15131f;min-height:500px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(40,20,120,.5)}
+.ph h3{font-size:1.1rem;font-weight:600}.ph small{color:var(--mut);font-size:.84rem}
+.ph ul{list-style:none;margin:10px 0;padding:0}.ph li{display:flex;justify-content:space-between;gap:8px;font-size:.92rem;padding:7px 0;border-bottom:1px solid var(--line)}
+.tot{display:flex;justify-content:space-between;font-weight:500;margin-bottom:10px}
+.ph input[type=text]{width:100%;padding:11px 14px;border:1px solid #C9C6DD;border-radius:99px;font:400 .95rem Outfit,sans-serif;color:var(--ink);margin:6px 0 10px}
+.ck{display:flex;gap:8px;font-size:.85rem;color:#444;align-items:flex-start}.ck input{accent-color:var(--v);margin-top:3px}
+.ph .btn{width:100%;margin-top:12px}
+.th{--p:0;position:relative;display:flex;justify-content:space-between;margin:2px 4px 16px}
+.th::before,.th i{content:"";position:absolute;left:10px;right:10px;top:9px;height:3px;border-radius:3px;background:#E3E0F2}
+.th i{right:auto;width:calc((100% - 20px)*var(--p));background:var(--ink);transition:width .7s cubic-bezier(.3,.8,.2,1)}
+.th span{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.78rem;font-weight:500;color:var(--mut)}
+.th span::before{content:"";width:21px;height:21px;border-radius:50%;background:#fff;border:3px solid #E3E0F2;transition:.4s}
+.th span.on{color:var(--ink)}.th span.on::before{background:var(--ink);border-color:var(--ink)}
+.th span.ap.on::before{background:var(--v);border-color:var(--v)}.th span.ok.on::before{background:var(--ok);border-color:var(--ok)}
+.stamp{position:absolute;right:10px;top:70px;width:96px;height:96px;pointer-events:none;opacity:0}
+.stamp.go{animation:st .6s cubic-bezier(.2,1.5,.4,1) forwards}
+@keyframes st{0%{opacity:0;transform:scale(2.4) rotate(-30deg)}60%{opacity:1}100%{opacity:.92;transform:scale(1) rotate(-14deg)}}
+.qr{display:block;margin:8px auto;width:150px;height:150px;background:#fff;padding:6px;border:1px solid var(--line);border-radius:12px}
+.paid{text-align:center;padding-top:8px}.paid svg{animation:pop .5s cubic-bezier(.2,1.5,.4,1)}
+@keyframes pop{from{transform:scale(.3);opacity:0}}
+.ring{width:132px;height:132px;border-radius:50%;margin:14px auto;background:conic-gradient(var(--ok) calc(var(--r,0)*1%),#ECE9F7 0);display:grid;place-items:center;transition:background .6s;position:relative}
+.ring::before{content:"";position:absolute;inset:14px;border-radius:50%;background:#fff}
+.ring b{position:relative;font-weight:500;font-size:1.15rem}
+.st{padding:10px 0;border-top:1px solid var(--line);font-size:.92rem}.st small{display:block;color:var(--mut)}
+.why{display:grid;gap:34px;margin-top:48px}
+@media(min-width:860px){.why{grid-template-columns:repeat(3,1fr)}}
+.ic{width:34px;height:34px;border-radius:10px;background:#F1ECFF;display:grid;place-items:center;margin-bottom:14px}
+.vis{margin-top:22px;height:190px;border-radius:20px;background:#F5F4FA;padding:16px;overflow:hidden}
+.vis .cd{padding:14px;border-radius:14px;box-shadow:0 14px 30px -18px rgba(70,30,160,.4)}
+.vv{background:var(--v);color:#fff;transform:rotate(-8deg);width:78%;margin:14px 0 0 8%}
+.cr{position:relative;max-width:440px;height:290px;margin:46px auto 0}
+.sc{position:absolute;inset:0;background:#fff;border-radius:22px;box-shadow:0 26px 50px -28px rgba(70,30,160,.45);border:1px solid #F0EEF8;padding:30px 26px;text-align:center;transition:transform .5s cubic-bezier(.3,.8,.2,1),opacity .5s}
+.sc[data-p="0"]{z-index:2}
+.sc[data-p="-1"]{transform:translateX(-58%) rotate(-7deg) scale(.88);opacity:.55}
+.sc[data-p="1"]{transform:translateX(58%) rotate(7deg) scale(.88);opacity:.55}
+.av{width:56px;height:56px;border-radius:50%;background:var(--v);color:#fff;display:grid;place-items:center;font-size:1.3rem;font-weight:500;margin:0 auto 12px}
+.sc h3{font-size:1.15rem}.sc .mut{font-size:.9rem}.sc p.q{margin-top:14px;font-size:1.05rem;line-height:1.45}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:26px}
+.dots button{width:22px;height:6px;border:0;border-radius:6px;background:#D6D2E8;cursor:pointer;padding:0;transition:width .3s,background .3s}
+.dots button[aria-current="true"]{width:44px;background:var(--v)}
+footer{max-width:1200px;margin:40px auto 0;border-radius:32px 32px 0 0;background:linear-gradient(180deg,#F5F1FF 0%,#DDD1FF 100%);padding:56px 20px 0;overflow:hidden;text-align:center}
+.fl{display:flex;flex-wrap:wrap;gap:12px 34px;justify-content:center}.fl a{text-decoration:none;font-weight:500}.fl a:hover{color:var(--v)}
+.fn{max-width:34em;margin:22px auto 0;font-size:.9rem;color:#55527A}
+.wm{margin-top:44px;font-size:clamp(3rem,16vw,13rem);font-weight:600;letter-spacing:-.05em;line-height:1.05;padding-bottom:.08em;white-space:nowrap;color:transparent;background:linear-gradient(180deg,#6B3EF5 15%,rgba(107,62,245,.22) 100%);-webkit-background-clip:text;background-clip:text}
+.btn{position:relative;overflow:hidden}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.4) 50%,transparent 70%);transform:translateX(-130%);transition:transform .7s}
+.btn:hover::after{transform:translateX(130%)}.btn:active{transform:scale(.97)}
+nav a:not(.btn){position:relative}
+nav a:not(.btn)::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;background:var(--v);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+nav a:not(.btn):hover::after{transform:scaleX(1)}
+.fc{animation-name:in,fl;animation-duration:.8s,6s;animation-iteration-count:1,infinite;animation-timing-function:cubic-bezier(.2,.8,.2,1),ease-in-out;animation-fill-mode:forwards,none;transition:margin .35s ease-out,box-shadow .3s}
+@keyframes fl{50%{translate:0 -10px}}
+.t2{animation-duration:.8s,7.5s}.t3{animation-duration:.8s,6.5s}.t4{animation-duration:.8s,8s}
+.t1{margin:calc(var(--my,0)*14px) 0 0 calc(var(--mx,0)*20px)}
+.t2{margin:calc(var(--my,0)*-10px) calc(var(--mx,0)*16px) 0 0}
+.t3{margin:0 0 calc(var(--my,0)*12px) calc(var(--mx,0)*24px)}
+.t4{margin:0 calc(var(--mx,0)*-22px) calc(var(--my,0)*14px) 0}
+.cd,.mc,.sc{transition:box-shadow .3s,border-color .3s}
+.cd:hover,.sc[data-p="0"]:hover{box-shadow:0 36px 64px -26px rgba(70,30,160,.55)}
+.mc:hover{border-color:var(--v)}
+.opt{transition:border-color .2s,background .2s,transform .2s}.opt:hover{border-color:#B9A6FF;transform:translateX(3px)}
+.logos span{transition:color .3s,transform .3s}.logos span:hover{color:var(--ink);transform:translateY(-3px)}
+.ic{transition:background .3s,transform .4s cubic-bezier(.3,1.6,.5,1)}
+.why>div:hover .ic{background:var(--v);transform:rotate(-8deg) scale(1.1)}.why>div:hover .ic svg{stroke:#fff}
+.rv{opacity:0;translate:0 30px;transition:opacity .8s cubic-bezier(.2,.8,.2,1),translate .8s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;translate:0 0}
+.bar i{transform-origin:left;transform:scaleX(0);transition:transform 1.3s .3s cubic-bezier(.2,.8,.2,1)}.go .bar i{transform:scaleX(1)}
+.go .gauge{animation:sp 1.4s cubic-bezier(.2,.8,.2,1) both}@keyframes sp{from{transform:rotate(-140deg);opacity:0}}
+#pg{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);height:3px;background:var(--v);transform-origin:0 50%;transform:scaleX(0);z-index:40}
+.vv{transform:none;rotate:-8deg}
+@media(min-width:900px){.dm>.cd:first-child{transform:none;rotate:-2deg}.dm>.cd:last-child{transform:none;rotate:2deg}}
+.cr{perspective:1100px}
+.sc[data-p="-1"]{transform:translateX(-60%) rotateY(24deg) scale(.88)}
+.sc[data-p="1"]{transform:translateX(60%) rotateY(-24deg) scale(.88)}
+.lap{transform:perspective(1400px) rotateX(calc((1 - var(--lp,1))*28deg));transform-origin:50% 100%}
+[data-t][data-t][data-t]{transform:perspective(900px) rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg));transition:transform .2s ease-out,box-shadow .3s,opacity .8s cubic-bezier(.2,.8,.2,1),translate .8s cubic-bezier(.2,.8,.2,1);will-change:transform}
+.lap[data-t][data-t][data-t]{transform:perspective(1400px) rotateX(calc(var(--ry,0deg) + (1 - var(--lp,1))*28deg)) rotateY(var(--rx,0deg))}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation-duration:.01ms!important;scroll-behavior:auto!important}.fc{animation-name:in!important}.lap{transform:none!important}}
+[hidden]{display:none!important}
+.xau{min-height:100vh;display:grid}
+.xpn{display:none;flex-direction:column;justify-content:space-between;gap:30px;margin:12px 0 12px 12px;padding:32px;border-radius:32px;background:linear-gradient(180deg,#F5F1FF 0%,#DDD1FF 100%)}
+.xpn h2{max-width:8em}
+.xfm{width:100%;max-width:420px;margin:0 auto;padding:28px 20px 48px;align-self:center}
+@media(min-width:900px){.xau{grid-template-columns:1fr 1fr}.xpn{display:flex}}
+.xfm h1{font-size:2.2rem;margin:24px 0 8px}
+.xbk{display:inline-block;color:var(--mut);text-decoration:none;font-weight:500}.xbk:hover{color:var(--ink)}
+.xfd{display:block;margin-top:16px;font-weight:500}
+.xip{display:block;width:100%;margin-top:6px;padding:12px 16px;border:1px solid #C9C6DD;border-radius:14px;font:400 1rem Outfit,sans-serif;color:var(--ink);background:#fff}
+.xip:focus-visible{outline:3px solid var(--v);outline-offset:1px;border-color:var(--v)}
+.xer{color:#C0262D;font-size:.9rem;min-height:1.4em;margin:12px 0 4px}
+.xdm{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+.xdp{padding-top:36px;padding-bottom:80px}.xdp h1{font-size:clamp(1.9rem,4vw,2.8rem)}
+.xsg{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin:28px 0 20px}
+.xdg{display:grid;gap:20px;align-items:start}
+@media(min-width:960px){.xdg.f{grid-template-columns:340px 1fr}}
+.xfx{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+.xfx .pill{cursor:pointer;font-family:inherit}.xfx .pill[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.xdl{display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:center;padding:16px 0;border-top:1px solid var(--line)}
+.xdl>:nth-child(even){text-align:right}
+@media(max-width:600px){#who{display:none}}
+</style></head>
+<body>
+<div id="lv">
+<header><div class="w"><a class="logo" href="#top"><span class="lt"><svg width="18" height="18" viewBox="0 0 28 28" aria-hidden="true"><circle cx="10" cy="14" r="7" fill="none" stroke="#fff" stroke-width="3"/><circle cx="18" cy="14" r="7" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/></svg></span>Handshake</a>
+<nav><a href="#try">How it works</a><a href="#why">Why Handshake</a><a href="#for">Who it’s for</a><a href="#pricing">Pricing</a><a class="btn o s" href="#login">Log in</a><a class="btn s" href="#signup">Get started</a></nav></div></header>
+
+<main id="top">
+<div class="hero">
+<div class="fc t1"><div class="row" style="margin-bottom:10px"><b>Proposal sent</b><small>Valid 7 days</small></div><small>Brand and landing page</small><div class="row" style="margin-top:6px"><small>Riya Sharma</small><small>₹37,000</small></div></div>
+<div class="fc t2"><small>Total in proposals</small><div class="gw"><div class="gauge"></div><b>₹37,000</b></div><div class="lg"><span><i style="background:var(--ok)"></i>Paid</span><span><i style="background:#F5B642"></i>Sent</span><span><i style="background:var(--v)"></i>Approved</span></div></div>
+<div class="fc t3"><small>Awaiting payment</small><div class="row"><span class="big">₹1.2L</span><span class="chip cp">+12%</span></div><small>vs September 2026</small><div class="bar"><i style="width:62%"></i></div></div>
+<div class="fc t4"><div class="row"><small>Income</small><small>Past 30 days</small></div><div class="big">₹16,000</div><svg viewBox="0 0 120 44" width="100%" height="44" aria-hidden="true"><path d="M0 38C18 36 28 20 48 24S82 6 120 10" fill="none" stroke="#6B3EF5" stroke-width="2.5"/></svg></div>
+<span class="lt"><svg width="32" height="32" viewBox="0 0 28 28" aria-hidden="true"><circle cx="10" cy="14" r="7" fill="none" stroke="#fff" stroke-width="2.6"/><circle cx="18" cy="14" r="7" fill="none" stroke="#fff" stroke-width="2.6" opacity=".7"/></svg></span>
+<h1>Your deal, one link. Handshake.</h1>
+<a class="btn" href="#signup">Start free</a>
+</div>
+
+<section style="padding-bottom:0"><div class="stage">
+<span class="pill v">No credit card required</span>
+<h2>Turn follow-ups into payments</h2>
+<form class="em" id="em"><input type="email" placeholder="Email" aria-label="Email address" required><button class="btn" type="submit">Start free</button></form>
+<div class="lap"><div class="scr">
+<div class="tb"><span class="lt"><svg width="12" height="12" viewBox="0 0 28 28" aria-hidden="true"><circle cx="10" cy="14" r="7" fill="none" stroke="#fff" stroke-width="3.4"/><circle cx="18" cy="14" r="7" fill="none" stroke="#fff" stroke-width="3.4" opacity=".7"/></svg></span><span class="tabs"><i>Home</i><i class="on">Proposals</i><i>Invoices</i></span></div>
+<div class="gh"><b>Good morning, Aarav!</b><span class="btn s">New proposal</span></div>
+<div class="g3">
+<div class="mc"><small class="mut">My proposals</small><div class="row"><span>Riya Sharma</span><span class="chip ca">Approved</span><b>₹37,000</b></div><div class="row"><span>Dev Patel</span><span class="chip cs">Sent</span><b>₹18,000</b></div><div class="row"><span>Mira Rao</span><span class="chip cp">Paid</span><b>₹9,500</b></div></div>
+<div class="mc"><small class="mut">Awaiting payment</small><div class="big" style="margin-top:6px">₹37k</div><small class="mut">2 invoices</small><div class="bar"><i style="width:58%"></i></div></div>
+<div class="mc" style="text-align:center"><small class="mut">Received</small><div class="gw" style="width:84px;height:84px"><div class="gauge"></div></div><b>₹16,000</b></div>
+</div>
+<div class="mv row"><span>Riya paid the 50% deposit</span><b>₹18,500</b></div>
+</div></div></div></section>
+
+<div class="cap">Clients pay with the UPI apps they already use</div>
+<div class="w"><div class="logos" aria-label="Works with common UPI apps"><span>GPay</span><span>PhonePe</span><span>Paytm</span><span>BHIM</span><span>WhatsApp</span><span>Razorpay</span></div></div>
+
+<section id="try"><div class="w ctr">
+<span class="pill">How it works</span><h2>How Handshake works</h2><p class="mut">Handshake helps freelancers stop chasing. Try it below, you play both sides.</p>
+<div class="dm">
+<div class="cd"><h3>You build it</h3><p class="mut" style="font-size:.92rem">Pick what’s included and how much is due upfront.</p>
+<fieldset id="fs">
+<label class="opt"><input type="checkbox" checked><span>Logo and brand kit</span><b>₹12,000</b></label>
+<label class="opt"><input type="checkbox" checked><span>Landing page</span><b>₹25,000</b></label>
+<label class="opt"><input type="checkbox"><span>Monthly upkeep</span><b>₹4,000</b></label>
+<span class="lbl">Due upfront</span>
+<div class="seg"><label><input type="radio" name="d" value="30"><span>30%</span></label><label><input type="radio" name="d" value="50" checked><span>50%</span></label><label><input type="radio" name="d" value="100"><span>100%</span></label></div>
+</fieldset>
+<p class="mut" id="hint" aria-live="polite" style="margin-top:16px;font-size:.92rem"></p>
+<button class="btn o s" id="rs" style="margin-top:12px;display:none">Reset demo</button></div>
+<div class="ph">
+<div class="th" id="th"><i></i><span class="on">Sent</span><span class="ap">Approved</span><span class="ok">Paid</span></div>
+<h3>Brand and landing page</h3><small>From Aarav Studio. Valid for 7 days.</small>
+<ul id="items"></ul><div class="tot"><span>Total</span><b id="tot"></b></div><div id="act" style="text-align:left"></div>
+<svg class="stamp" id="stamp" viewBox="0 0 92 92" aria-hidden="true"><circle cx="46" cy="46" r="42" fill="none" stroke="#6B3EF5" stroke-width="4"/><circle cx="46" cy="46" r="34" fill="none" stroke="#6B3EF5" stroke-width="1.5" stroke-dasharray="3 4"/><text x="46" y="52" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="600" font-size="15" fill="#6B3EF5">Approved</text></svg>
+</div>
+<div class="cd"><h3>Your deal</h3><div class="ring" id="ring"><b id="rv">₹0</b></div>
+<div class="st"><small>Proposal</small><span id="s1"></span></div><div class="st"><small>Payment</small><span id="s2"></span></div><div class="st"><small>Invoice</small><span id="s3"></span></div></div>
+</div></div></section>
+
+<section id="why" style="padding-top:20px"><div class="w ctr">
+<span class="pill">Why Handshake</span><h2>Why freelancers choose Handshake</h2>
+<div class="why" style="text-align:left">
+<div><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B3EF5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14l5-5 5 5M7 19l5-5 5 5"/></svg></div><h3>Get paid faster</h3><p class="mut">The client approves and pays on the same page, so nothing waits on a reminder.</p>
+<div class="vis"><div class="cd vv"><small style="opacity:.8">Received</small><div class="big">₹3,800</div></div></div></div>
+<div><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B3EF5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v16l-3-2-2 2-2-2-2 2-2-2-3 2zM9 9h6M9 13h6"/></svg></div><h3>Clear records</h3><p class="mut">Every yes is saved with a name, a time and the version the client saw.</p>
+<div class="vis"><div class="cd"><div class="row"><div><small class="mut">Approved</small><div class="big">₹25k</div></div><div><small class="mut">Sent</small><div class="big">₹12k</div></div></div><div class="bar"><i style="width:68%"></i></div></div></div></div>
+<div><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B3EF5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0012 3z"/></svg></div><h3>Zero setup</h3><p class="mut">No workflow to configure. Build a proposal in about two minutes.</p>
+<div class="vis"><div class="cd"><div class="row"><span>Riya</span><span class="chip cp">Paid</span></div><div class="row" style="margin-top:8px"><span>Dev</span><span class="chip ca">Approved</span></div><div class="row" style="margin-top:8px"><span>Mira</span><span class="chip cs">Sent</span></div></div></div></div>
+</div></div></section>
+
+<section id="for" style="padding-top:20px"><div class="w ctr">
+<span class="pill">Example scenarios</span><h2>Built for how you work</h2>
+<div class="cr" id="cr">
+<div class="sc"><div class="av">D</div><h3>The designer</h3><p class="mut">Logo and brand projects</p><p class="q">Send the scope and the deposit in one link. Stop asking “did you see my message?”</p></div>
+<div class="sc"><div class="av">V</div><h3>The developer</h3><p class="mut">Websites and apps</p><p class="q">Split the build into a deposit and a final payment, each tracked on the same deal.</p></div>
+<div class="sc"><div class="av">E</div><h3>The video editor</h3><p class="mut">Reels and edits</p><p class="q">Get a clear yes on the revisions you’ve included before you start cutting.</p></div>
+</div>
+<div class="dots" id="dots"><button aria-label="Scenario 1"></button><button aria-label="Scenario 2"></button><button aria-label="Scenario 3"></button></div>
+</div></section>
+<section id="pricing" style="padding-top:20px"><div class="w ctr">
+<span class="pill">Pricing</span><h2>Simple pricing</h2><p class="mut">Start free. Upgrade when you outgrow it.</p>
+<div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));max-width:760px;margin:44px auto 0;text-align:left">
+<div class="cd" style="border:1px solid var(--line)"><h3>Free</h3><div class="big" style="margin:10px 0">₹0</div><p class="mut">Up to 3 active proposals</p><p class="mut">Approval and payment on one link</p><p class="mut">Clear records of every yes</p><a class="btn o" style="margin-top:20px;width:100%" href="#signup">Start free</a></div>
+<div class="cd" style="background:var(--ink);color:#fff"><h3>Pro</h3><div class="big" style="margin:10px 0">₹499<small style="font-size:.9rem;opacity:.7"> /month</small></div><p style="opacity:.8">Unlimited proposals</p><p style="opacity:.8">Everything in Free</p><p style="opacity:.8">Priority support</p><a class="btn o" style="margin-top:20px;width:100%" href="#signup">Get Pro</a></div>
+</div></div></section>
+</main>
+
+<footer>
+<div class="fl"><a href="#try">How it works</a><a href="#why">Why Handshake</a><a href="#for">Who it’s for</a><a href="#login">Log in</a><a href="#signup">Sign up</a><a href="#top">Back to top</a></div>
+<p class="fn">Approval in Handshake is a click-to-accept record, not a certified e-signature. This is a demo build: nothing on this page is sent or charged.</p>
+<div class="wm" aria-hidden="true">handshake</div>
+</footer>
+</div>
+
+<div id="av" hidden><div class="xau">
+<aside class="xpn"><a class="logo" href="#top"><span class="lt"><svg width="18" height="18" viewBox="0 0 28 28" aria-hidden="true"><circle cx="10" cy="14" r="7" fill="none" stroke="#fff" stroke-width="3"/><circle cx="18" cy="14" r="7" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/></svg></span>Handshake</a>
+<div><h2>Your deal, one link.</h2><p class="mut" style="margin-top:14px;max-width:24em">Send the scope, get the yes, collect the deposit. All on one page.</p></div>
+<div class="cd" style="max-width:270px"><div class="row" style="margin-bottom:8px"><b style="font-weight:500">Proposal sent</b><small class="mut">Valid 7 days</small></div><small class="mut">Brand and landing page</small><div class="row" style="margin-top:6px"><small>Riya Sharma</small><b style="font-weight:500">₹37,000</b></div></div></aside>
+<div class="xfm"><a class="xbk" href="#top">← Back to home</a>
+<h1 id="xt">Welcome back</h1><p class="mut" id="xs">Log in to see your proposals and payments.</p>
+<div class="seg" id="xm" style="margin-top:20px"><label><input type="radio" name="m" value="login" checked><span>Log in</span></label><label><input type="radio" name="m" value="signup"><span>Sign up</span></label></div>
+<form id="xf" novalidate>
+<label class="xfd" id="nmw" hidden>Full name<input class="xip" name="nm" autocomplete="name"></label>
+<label class="xfd">Email<input class="xip" type="email" name="em" autocomplete="email"></label>
+<label class="xfd">Password<input class="xip" type="password" name="pw" autocomplete="current-password"></label>
+<fieldset id="rlw" hidden><span class="lbl">I am a</span><div class="seg"><label><input type="radio" name="rl" value="freelancer" checked><span>Freelancer</span></label><label><input type="radio" name="rl" value="client"><span>Client</span></label></div></fieldset>
+<p class="xer" id="xe" role="alert"></p>
+<button class="btn" id="xb" style="width:100%">Log in</button>
+</form>
+<p class="fn" style="margin:22px 0 0;text-align:left">Passwords are hashed before they are stored.</p>
+</div></div></div>
+
+<div id="dv" hidden>
+<header><div class="w"><a class="logo" href="#dashboard"><span class="lt"><svg width="18" height="18" viewBox="0 0 28 28" aria-hidden="true"><circle cx="10" cy="14" r="7" fill="none" stroke="#fff" stroke-width="3"/><circle cx="18" cy="14" r="7" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/></svg></span>Handshake</a><nav><span class="mut" id="who"></span><span class="pill v" id="rc"></span><button class="btn o s" id="lo">Log out</button></nav></div></header>
+<div class="w xdp"><h1 id="dh"></h1><p class="mut" id="dsub" style="margin-top:8px"></p><div id="pl" style="margin-top:14px"></div>
+<div class="xsg" id="sg"></div>
+<div class="xdg" id="dg">
+<div class="cd" id="nw"><h3>New proposal</h3>
+<form id="nf" novalidate>
+<label class="xfd">Project<input class="xip" name="ti" placeholder="Brand and landing page"></label>
+<label class="xfd">Client name<input class="xip" name="cn"></label>
+<label class="xfd">Client email<input class="xip" type="email" name="ce2"></label>
+<label class="xfd">Total (₹)<input class="xip" type="number" min="1" name="tt" inputmode="numeric"></label>
+<span class="lbl">Due upfront</span><div class="seg"><label><input type="radio" name="dp" value="30"><span>30%</span></label><label><input type="radio" name="dp" value="50" checked><span>50%</span></label><label><input type="radio" name="dp" value="100"><span>100%</span></label></div>
+<p class="xer" id="ne" role="alert"></p><button class="btn" style="width:100%">Send proposal</button>
+</form></div>
+<div class="cd"><h3>Proposals</h3><div class="xfx" id="fx"></div><div id="dl"></div></div>
+</div></div></div>
+
+<script>
+const $=s=>document.querySelector(s),fmt=n=>"₹"+n.toLocaleString("en-IN"),IT=[["Logo and brand kit",12000],["Landing page",25000],["Monthly upkeep",4000]];
+let st="sent",who="Riya Sharma";
+function qr(seed,n=25){let s=seed|1,o="";const r=()=>(s=(s*1664525+1013904223)>>>0)/4294967296;
+for(let y=0;y<n;y++)for(let x=0;x<n;x++){let on;
+if((x<8&&y<8)||(x>n-9&&y<8)||(x<8&&y>n-9)){const a=x<8?x:x-(n-8),b=y<8?y:y-(n-8),d=Math.max(Math.abs(a-3),Math.abs(b-3));on=a<7&&b<7&&(d==3||d<=1)}else on=r()>.5;
+if(on)o+=`<rect x="${x}" y="${y}" width="1" height="1"/>`}
+return `<svg class="qr" viewBox="-1 -1 ${n+2} ${n+2}" role="img" aria-label="Demo UPI QR code" fill="#0C0A29">${o}</svg>`}
+function calc(){const c=[...document.querySelectorAll(".opt input")].map(i=>i.checked),rows=IT.filter((_,i)=>c[i]),t=rows.reduce((a,r)=>a+r[1],0),dep=+document.querySelector(".seg input:checked").value;return{rows,t,dep,due:Math.round(t*dep/100)}}
+function rtop(){const{rows,t}=calc();
+$("#items").innerHTML=rows.length?rows.map(r=>`<li>${r[0]}<b style="font-weight:500">${fmt(r[1])}</b></li>`).join(""):"<li>Pick at least one item</li>";
+$("#tot").textContent=fmt(t);chk();side()}
+function chk(){const a=$("#ap");if(a)a.disabled=!($("#ac").checked&&$("#nm").value.trim()&&calc().t>0)}
+function side(){const{t,due}=calc(),i=["sent","approved","paid"].indexOf(st);
+$("#ring").style.setProperty("--r",i==2&&t?Math.round(due/t*100):0);$("#rv").textContent=fmt(i==2?due:0);
+$("#s1").textContent=i==0?"Sent, waiting for approval":"Approved by "+who;
+$("#s2").textContent=["Not due yet","Waiting for "+fmt(due),"Received "+fmt(due)][i];
+$("#s3").textContent=i==2?"HS-2026-0001, marked paid":"Created after payment"}
+function act(){const{t,due,dep}=calc(),a=$("#act"),i=["sent","approved","paid"].indexOf(st),th=$("#th"),bal=dep<100?`<small>Balance of ${fmt(t-due)} is due on delivery.</small>`:"";
+th.style.setProperty("--p",i/2);th.querySelectorAll("span").forEach((s,k)=>s.classList.toggle("on",k<=i));
+$("#fs").disabled=st!="sent";$("#rs").style.display=st=="sent"?"none":"inline-flex";
+$("#hint").textContent=["This is the client’s view. Approve it on the phone.","Approved. The same link now asks for payment.","Paid. The invoice was created and marked paid."][i];
+if(st=="sent")a.innerHTML=`<label>Your name<input type="text" id="nm" value="${who}" autocomplete="off"></label><label class="ck"><input type="checkbox" id="ac"> I accept this proposal and its terms.</label><button class="btn" id="ap" disabled>Approve proposal</button>`;
+if(st=="approved")a.innerHTML=`<small>${dep<100?dep+"% deposit":"Full payment"}, by any UPI app</small><b style="display:block;font-size:1.4rem;font-weight:500">${fmt(due)}</b>${qr(due)}<button class="btn" id="pay">Simulate payment</button>${bal}`;
+if(st=="paid")a.innerHTML=`<div class="paid"><svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#16B364"/><path d="M19 33l9 9 17-19" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg><h3 style="margin-top:10px">Paid ${fmt(due)}</h3><p class="mut" style="margin:6px 0">Receipt HS-2026-0001</p>${bal}</div>`;
+$("#stamp").classList.toggle("go",st!="sent");side()}
+document.addEventListener("change",e=>{if(e.target.closest(".opt,.seg"))rtop();if(e.target.id=="ac")chk()});
+document.addEventListener("input",e=>{if(e.target.id=="nm")chk()});
+document.addEventListener("click",e=>{const id=e.target.id;
+if(id=="ap"){who=$("#nm").value.trim();st="approved";act()}
+if(id=="pay"){st="paid";act()}
+if(id=="rs"){st="sent";act();rtop()}});
+rtop();act();
+$("#em").addEventListener("submit",e=>{e.preventDefault();window.hsPre=e.target.querySelector("input").value;window.hsGo("signup")});
+const sc=[...document.querySelectorAll(".sc")],dt=[...document.querySelectorAll("#dots button")];
+function show(k){sc.forEach((c,i)=>{let p=(i-k+3)%3;c.dataset.p=p==2?-1:p});dt.forEach((d,i)=>d.setAttribute("aria-current",i==k))}
+dt.forEach((d,i)=>d.onclick=()=>show(i));show(0);
+const rm=matchMedia("(prefers-reduced-motion:reduce)").matches,fine=matchMedia("(hover:hover) and (pointer:fine)").matches,hero=$(".hero"),lap=$(".lap");
+let ci=0,hold=false,tk=0;hero.classList.add("go");
+dt.forEach((d,i)=>d.addEventListener("click",()=>{ci=i}));
+$("#cr").addEventListener("pointerenter",()=>hold=true);$("#cr").addEventListener("pointerleave",()=>hold=false);
+if(!rm)setInterval(()=>{if(!hold&&!document.hidden){ci=(ci+1)%3;show(ci)}},4200);
+if(!rm){
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const t=e.target;t.classList.add("in","go");setTimeout(()=>t.style.transitionDelay="0s",1600);io.unobserve(t)}}),{threshold:.15});
+document.querySelectorAll(".ctr .pill,.ctr h2,.ctr>p,.why>div,.cr,.dm,.logos span,.cap,.stage .pill,.stage h2,.em,.lap").forEach(el=>{el.classList.add("rv");el.style.transitionDelay=([...el.parentNode.children].indexOf(el)%5)*80+"ms";io.observe(el)});
+document.querySelectorAll(".stage,.vis").forEach(el=>io.observe(el));
+}else document.querySelectorAll(".stage,.vis").forEach(el=>el.classList.add("go"));
+if(!rm&&fine){
+document.querySelectorAll(".dm>.cd,.ph,.vis .cd,.lap").forEach(el=>{el.dataset.t=1;
+el.addEventListener("pointermove",e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.style.setProperty("--rx",(x*9).toFixed(2)+"deg");el.style.setProperty("--ry",(-y*9).toFixed(2)+"deg")});
+el.addEventListener("pointerleave",()=>{el.style.setProperty("--rx","0deg");el.style.setProperty("--ry","0deg")})});
+hero.addEventListener("pointermove",e=>{const r=hero.getBoundingClientRect();hero.style.setProperty("--mx",((e.clientX-r.left)/r.width-.5)*2);hero.style.setProperty("--my",((e.clientY-r.top)/r.height-.5)*2)});
+hero.addEventListener("pointerleave",()=>{hero.style.setProperty("--mx",0);hero.style.setProperty("--my",0)});
+}
+const pg=document.createElement("div");pg.id="pg";document.body.append(pg);
+function upd(){tk=0;const max=document.documentElement.scrollHeight-innerHeight;pg.style.transform=`scaleX(${max>0?scrollY/max:0})`;
+if(!rm){const r=lap.getBoundingClientRect();lap.style.setProperty("--lp",Math.min(1,Math.max(0,(innerHeight-r.top)/(innerHeight*.7))))}}
+addEventListener("scroll",()=>{if(!tk)tk=requestAnimationFrame(upd)},{passive:true});addEventListener("resize",upd);upd();
+</script>
+<script>
+(()=>{
+const q=s=>document.querySelector(s),R=n=>"₹"+n.toLocaleString("en-IN"),E=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),
+reduce=matchMedia("(prefers-reduced-motion:reduce)").matches,fineP=matchMedia("(hover:hover) and (pointer:fine)").matches,
+V=["lv","av","dv"],TT={lv:"Handshake: your deal, one link",av:"Log in · Handshake",dv:"Dashboard · Handshake"},AUTH=["login","signup","dashboard"];
+let view="lv",mode="login",flt="all",sid=0,user=null,deals=[];
+async function api(p,o={}){const r=await fetch("/api"+p,{method:o.method||"GET",headers:o.body?{"Content-Type":"application/json"}:{},body:o.body?JSON.stringify(o.body):undefined,credentials:"same-origin"});
+let d={};try{d=await r.json()}catch(e){}if(!r.ok){const x=new Error(d.error||"Something went wrong.");x.status=r.status;throw x}return d}
+const boot=api("/me").then(d=>{user=d.user;const a=q('nav a[href="#login"]');if(a){a.textContent="Dashboard";a.setAttribute("href","#dashboard")}}).catch(()=>{user=null});
+/* smooth scroll */
+const yOf=el=>Math.max(0,el.getBoundingClientRect().top+scrollY-72);
+function sm(y){const my=++sid,s=scrollY,d=Math.min(y,document.documentElement.scrollHeight-innerHeight)-s;
+if(reduce||Math.abs(d)<2){scrollTo({top:s+d,behavior:"instant"});return}
+const D=Math.min(1200,450+Math.abs(d)*.22),t0=performance.now();
+(function f(t){if(my!=sid)return;const p=Math.min(1,(t-t0)/D),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;scrollTo({top:s+d*e,behavior:"instant"});if(p<1)requestAnimationFrame(f)})(t0)}
+let tg=scrollY,cur=scrollY,wr=0;
+function tick(){cur+=(tg-cur)*.12;if(Math.abs(tg-cur)<.5){cur=tg;wr=0}scrollTo({top:cur,behavior:"instant"});if(wr)wr=requestAnimationFrame(tick)}
+addEventListener("wheel",e=>{if(reduce||!fineP||e.ctrlKey||view!="lv")return;e.preventDefault();sid++;if(!wr)tg=cur=scrollY;
+tg=Math.max(0,Math.min(tg+e.deltaY*(e.deltaMode==1?16:1),document.documentElement.scrollHeight-innerHeight));if(!wr)wr=requestAnimationFrame(tick)},{passive:false});
+addEventListener("scroll",()=>{if(!wr){tg=cur=scrollY}},{passive:true});
+/* routing */
+function show(v){view=v;V.forEach(i=>q("#"+i).hidden=i!=v);q("#pg").style.display=v=="lv"?"":"none";document.title=TT[v]}
+async function route(h){await boot;
+if(h=="dashboard"){if(!user)return go("login");show("dv");await renderD();scrollTo(0,0);return}
+if(h=="login"||h=="signup"){if(user)return go("dashboard");show("av");setMode(h);scrollTo(0,0);return}
+const was=view,t=h&&h!="top"?document.getElementById(h):null;show("lv");
+if(was=="lv")return;scrollTo({top:t?yOf(t):0,behavior:"instant"})}
+function go(h){try{history.replaceState(null,"","#"+h)}catch(e){}return route(h)}
+window.hsGo=go;
+document.addEventListener("click",async e=>{
+const a=e.target.closest('a[href^="#"]');
+if(a){const h=a.getAttribute("href").slice(1),t=h&&document.getElementById(h);
+if(AUTH.includes(h)){e.preventDefault();go(h)}
+else if(t){e.preventDefault();view!="lv"?go(h):sm(h=="top"?0:yOf(t))}}
+if(e.target.id=="lo"){try{await api("/auth/logout",{method:"POST"})}catch(x){}user=null;deals=[];go("top")}
+const f=e.target.closest("[data-f]");if(f){flt=f.dataset.f;draw()}
+if(e.target.closest("[data-up]")){try{user=(await api("/billing/upgrade",{method:"POST"})).user;draw()}catch(x){const m=q("#ple");if(m)m.textContent=x.message}}
+const b=e.target.closest("[data-a]");
+if(b){b.disabled=true;try{await api("/deals/"+b.dataset.id+"/"+b.dataset.a,{method:"POST"})}catch(x){}await renderD()}});
+addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(AUTH.includes(h))route(h)});
+/* auth */
+const err=m=>{q("#xe").textContent=m};
+function setMode(m){mode=m;const s=m=="signup",f=q("#xf");
+q("#xm input[value="+m+"]").checked=true;q("#nmw").hidden=!s;q("#rlw").hidden=!s;
+q("#xt").textContent=s?"Create your account":"Welcome back";
+q("#xs").textContent=s?"Free to start. No credit card required.":"Log in to see your proposals and payments.";
+q("#xb").textContent=s?"Create account":"Log in";f.pw.autocomplete=s?"new-password":"current-password";err("");
+if(s&&window.hsPre){f.em.value=window.hsPre;window.hsPre=""}}
+document.addEventListener("change",e=>{if(e.target.name=="m")go(e.target.value)});
+q("#xf").addEventListener("submit",async e=>{e.preventDefault();const f=e.target,b=q("#xb");err("");
+const body={email:f.em.value.trim(),password:f.pw.value};if(mode=="signup"){body.name=f.nm.value.trim();body.role=f.rl.value}
+b.disabled=true;
+try{user=(await api("/auth/"+mode,{method:"POST",body})).user;f.reset();go("dashboard")}catch(x){err(x.message)}finally{b.disabled=false}});
+/* dashboard */
+const due=d=>Math.round(d.total*d.deposit/100);
+async function renderD(){if(!user)return go("login");
+try{deals=(await api("/deals")).deals}catch(x){if(x.status==401){user=null;return go("login")}deals=[]}
+draw()}
+function draw(){if(!user)return;const u=user,all=deals,cl=u.role=="client",
+sum=(f,g)=>all.filter(f).reduce((a,d)=>a+g(d),0),h=new Date().getHours();
+q("#dh").textContent=(h<12?"Good morning":h<17?"Good afternoon":"Good evening")+", "+u.name.split(" ")[0]+"!";
+q("#who").textContent=u.name;q("#rc").textContent=cl?"Client":"Freelancer";
+q("#dsub").textContent=cl?"Proposals sent to you. Approve, then pay by UPI.":"Your proposals and payments in one place.";
+const pro=u.plan=="pro",act=all.filter(d=>d.status!="paid").length;
+q("#pl").innerHTML=cl?"":`<span class="pill ${pro?"v":""}">${pro?"Pro plan":"Free plan"}</span> <small class="mut">${pro?"Unlimited proposals":act+" of "+u.limit+" active proposals used"}</small>${pro?"":` <button class="btn o s" data-up="1" style="margin-left:6px">Upgrade to Pro</button>`}<small class="mut" id="ple" style="display:block;margin-top:6px"></small>`;
+const S=cl?[["Waiting for your yes",sum(d=>d.status=="sent",d=>d.total)],["To pay",sum(d=>d.status=="approved",due)],["Paid",sum(d=>d.status=="paid",due)]]:[["Total in proposals",sum(()=>1,d=>d.total)],["Awaiting payment",sum(d=>d.status=="approved",due)],["Received",sum(d=>d.status=="paid",due)]];
+q("#sg").innerHTML=S.map(([l,v])=>`<div class="cd"><small class="mut">${l}</small><div class="big">${R(v)}</div></div>`).join("");
+q("#nw").hidden=cl;q("#dg").classList.toggle("f",!cl);
+const n=k=>all.filter(d=>k=="all"||d.status==k).length;
+q("#fx").innerHTML=["all","sent","approved","paid"].map(k=>`<button class="pill" data-f="${k}" aria-pressed="${flt==k}">${k[0].toUpperCase()+k.slice(1)} · ${n(k)}</button>`).join("");
+const L=all.filter(d=>flt=="all"||d.status==flt);
+q("#dl").innerHTML=L.length?L.map(d=>{const c={sent:"cs",approved:"ca",paid:"cp"}[d.status];let a;
+if(cl&&d.status=="sent")a=`<button class="btn s" data-a="approve" data-id="${E(d.id)}">Approve</button>`;
+else if(cl&&d.status=="approved")a=`<button class="btn s" data-a="pay" data-id="${E(d.id)}">Pay ${R(due(d))}</button>`;
+else if(d.status=="paid")a=`<small class="mut">Receipt HS-${E(d.id.slice(-6).toUpperCase())}</small>`;
+else a=`<small class="mut">${d.status=="sent"?"Waiting for client approval":"Waiting for payment"}</small>`;
+return`<div class="xdl"><div><b style="font-weight:500">${E(d.title)}</b><small class="mut" style="display:block">${cl?"From "+E(d.owner?d.owner.name:""):E(d.clientName)+" · "+E(d.clientEmail)}</small></div><div><span class="chip ${c}">${d.status[0].toUpperCase()+d.status.slice(1)}</span><div>${R(d.total)}</div></div><small class="mut">${d.deposit}% upfront · ${R(due(d))}</small><div>${a}</div></div>`}).join(""):`<p class="mut" style="margin-top:14px">${cl?"Nothing here yet. Proposals sent to your email will show up here.":"No proposals here yet. Send your first one."}</p>`}
+q("#nf").addEventListener("submit",async e=>{e.preventDefault();const f=e.target;q("#ne").textContent="";
+try{await api("/deals",{method:"POST",body:{title:f.ti.value,clientName:f.cn.value,clientEmail:f.ce2.value,total:f.tt.value,deposit:f.dp.value}});f.reset();flt="all";await renderD()}
+catch(x){q("#ne").textContent=x.message}});
+const h0=location.hash.slice(1);if(AUTH.includes(h0))route(h0);
+})();
+</script>
+</body></html>
